@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>NAVAXDMFExportBusinessEvent</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// Data management export file business event.
+/// </summary>
+[BusinessEvents(classStr(NAVAXDMFExportBusinessEventContract), "Data management export business event", "Data management export event to send the file", ModuleAxapta::DIXF)]
+public final class NAVAXDMFExportBusinessEvent extends BusinessEventsBase
+{
+    private RefRecId recId;
+
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>parmRecId</Name>
+				<Source><![CDATA[
+    private RefRecId parmRecId(RefRecId _recId = recId)
+    {
+        recId = _recId;
+
+        return recId;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>newFromDMFEntityExportDetailsRecId</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Creates a <c>NAVAXDMFExportBusinessEvent</c> from a RefRecId.
+    /// </summary>
+    /// <param name = "_recId"> The A record identifier for the <c>DMFEntityExportDetails</c> table.</param>
+    /// <returns>A <c>NAVAXDMFExportBusinessEvent</c>.</returns>
+    public static NAVAXDMFExportBusinessEvent newFromDMFEntityExportDetailsRecId(RefRecId _recId)
+    {
+        NAVAXDMFExportBusinessEvent businessEvent = new NAVAXDMFExportBusinessEvent();
+        businessEvent.parmRecId(_recId);
+
+        return businessEvent;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>new</Name>
+				<Source><![CDATA[
+    private void new()
+    {
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>buildContract</Name>
+				<Source><![CDATA[
+    [Wrappable(true), Replaceable(true)]
+    public BusinessEventsContract buildContract()
+    {
+        DMFEntityExportDetails dmfEntityExportDetails;
+        select firstonly dmfEntityExportDetails
+            where dmfEntityExportDetails.RecId == recId;
+        return NAVAXDMFExportBusinessEventContract::newFromDMFEntityExportDetails(dmfEntityExportDetails);
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

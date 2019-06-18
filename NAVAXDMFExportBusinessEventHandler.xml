@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>NAVAXDMFExportBusinessEventHandler</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+class NAVAXDMFExportBusinessEventHandler
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>DMFEntityExportDetails_onInserted</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    [DataEventHandler(tableStr(DMFEntityExportDetails), DataEventType::Inserted)]
+    public static void DMFEntityExportDetails_onInserted(Common sender, DataEventArgs e)
+    {
+        DMFEntityExportDetails dmfEntityExportDetails = sender;                                                                         
+        DMFDefinitionGroup dmfDefinitionGroup = DMFDefinitionGroup::find(dmfEntityExportDetails.DefinitionGroup);
+
+        if (dmfDefinitionGroup.OperationType == DMFOperationType::Export &&
+            dmfDefinitionGroup.ProjectCategory == DMFProjectCategory::Integration &&
+            dmfEntityExportDetails.RecId &&
+            dmfEntityExportDetails.SampleFilePath)
+        {
+            NAVAXDMFExportBusinessEvent businessEvent = NAVAXDMFExportBusinessEvent::newFromDMFEntityExportDetailsRecId(dmfEntityExportDetails.RecId);
+            businessEvent.send();
+        }
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

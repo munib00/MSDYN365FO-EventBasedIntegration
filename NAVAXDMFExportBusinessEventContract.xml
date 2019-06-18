@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>NAVAXDMFExportBusinessEventContract</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The data contract for a <c>NAVAXDMFExportBusinessEvent</c>.
+/// </summary>
+[DataContract]
+public final class NAVAXDMFExportBusinessEventContract extends BusinessEventsContract
+{
+    private RefRecId recId;    
+    private URL downloadUrl;
+    private DMFEntityName entityName;
+    private LegalEntityDataAreaId  legalEntity;
+    private int noOfRecords;
+    private DMFOperationType operationType;
+    private DMFProjectCategory  projectCategory;
+  
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>newFromDMFEntityExportDetails</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Creates a <c>NAVAXDMFExportBusinessEventContract</c> from a <c>DMFEntityExportDetails</c> record.
+    /// </summary>
+    /// <param name = "_dmfEntityExportDetails">A <c>DMFEntityExportDetails</c> record.</param>
+    /// <returns>A <c>NAVAXDMFExportBusinessEventContract</c>.</returns>
+    public static NAVAXDMFExportBusinessEventContract newFromDMFEntityExportDetails(DMFEntityExportDetails _dmfEntityExportDetails)
+    {
+        var contract = new NAVAXDMFExportBusinessEventContract();
+        contract.initialize(_dmfEntityExportDetails);
+
+        return contract;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>initialize</Name>
+				<Source><![CDATA[
+    private void initialize(DMFEntityExportDetails _dmfEntityExportDetails)
+    {     
+        DMFDefinitionGroupExecution dmfDefinitionGroupExecution = DMFDefinitionGroupExecution::find(_dmfEntityExportDetails.DefinitionGroup, _dmfEntityExportDetails.Entity, _dmfEntityExportDetails.ExecutionId);                                          
+        DMFDefinitionGroup dmfDefinitionGroup = DMFDefinitionGroup::find(_dmfEntityExportDetails.DefinitionGroup);
+
+        recId           = _dmfEntityExportDetails.RecId;
+        entityName      = _dmfEntityExportDetails.Entity;
+        legalEntity     = dmfDefinitionGroupExecution.company();
+        noOfRecords     = dmfDefinitionGroupExecution.NoOfRecords;
+        operationType   = dmfDefinitionGroup.OperationType;
+        projectCategory = dmfDefinitionGroup.ProjectCategory;
+        downloadUrl     = _dmfEntityExportDetails.SampleFilePath ? DMFDataPopulation::getAzureBlobReadUrl(str2Guid(_dmfEntityExportDetails.SampleFilePath)) : '';
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>new</Name>
+				<Source><![CDATA[
+    private void new()
+    {
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmOperationType</Name>
+				<Source><![CDATA[
+    [DataMember('OperationType'), BusinessEventsDataMember("Operation type")]
+    public DMFOperationType parmOperationType(DMFOperationType _operationType = operationType)
+    {
+        operationType = _operationType;
+
+        return operationType;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmProjectCategory</Name>
+				<Source><![CDATA[
+    [DataMember('ProjectCategory'), BusinessEventsDataMember("Project category")]
+    public DMFProjectCategory parmProjectCategory(DMFProjectCategory _projectCategory = projectCategory)
+    {
+        projectCategory = _projectCategory;
+
+        return projectCategory;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmLegalEntity</Name>
+				<Source><![CDATA[
+    [DataMember('LegalEntity'), BusinessEventsDataMember("Legal entity")]
+    public LegalEntityDataAreaId parmLegalEntity(LegalEntityDataAreaId _legalEntity = legalEntity)
+    {
+        legalEntity = _legalEntity;
+
+        return legalEntity;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmNoOfRecords</Name>
+				<Source><![CDATA[
+    [DataMember('NoOfRecords'), BusinessEventsDataMember("Number of records")]
+    public int parmNoOfRecords(int _noOfRecords = noOfRecords)
+    {
+        noOfRecords = _noOfRecords;
+
+        return noOfRecords;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmRecId</Name>
+				<Source><![CDATA[
+    [DataMember('RecId'), BusinessEventsDataMember("RecId")]
+    public RefRecId parmRecId(RefRecId _recId = recId)
+    {
+        recId = _recId;
+
+        return recId;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmDownloadURL</Name>
+				<Source><![CDATA[
+    [DataMember('DownloadURL'), BusinessEventsDataMember("Download URL")]
+    public URL parmDownloadURL(URL _downloadUrl = downloadUrl)
+    {
+        downloadUrl = _downloadUrl;
+
+        return downloadUrl;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmEntityName</Name>
+				<Source><![CDATA[
+    [DataMember('EntityName'), BusinessEventsDataMember("Entity name")]
+    public DMFEntityName parmEntityName(DMFEntityName _entityName = entityName)
+    {
+        entityName = _entityName;
+
+        return entityName;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>
