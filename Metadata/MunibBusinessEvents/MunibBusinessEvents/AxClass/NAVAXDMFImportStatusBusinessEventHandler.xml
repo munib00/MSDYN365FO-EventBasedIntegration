@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>NAVAXDMFImportStatusBusinessEventHandler</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+class NAVAXDMFImportStatusBusinessEventHandler
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>DMFDefinitionGroupExecution_onUpdated</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// On update send the business event
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    [DataEventHandler(tableStr(DMFDefinitionGroupExecution), DataEventType::Updated)]
+    public static void DMFDefinitionGroupExecution_onUpdated(Common sender, DataEventArgs e)
+    {
+        DMFDefinitionGroupExecution dmfDefinitionGroupExecution = sender;
+        DMFDefinitionGroup dmfDefinitionGroup = DMFDefinitionGroup::find(dmfDefinitionGroupExecution.DefinitionGroup);
+        if (dmfDefinitionGroupExecution &&
+            dmfDefinitionGroup.OperationType == DMFOperationType::Import &&
+            dmfDefinitionGroup.ProjectCategory == DMFProjectCategory::Integration
+            )
+        {
+            NAVAXDMFImportStatusBusinessEvent businessEvent = NAVAXDMFImportStatusBusinessEvent::newFromDMFDefinitionGroupExecutionRecId(dmfDefinitionGroupExecution.RecId);
+            businessEvent.send();
+        }
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

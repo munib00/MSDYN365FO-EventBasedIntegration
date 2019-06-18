@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>NAVAXDMFImportStatusBusinessEvent</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// Data management export file business event.
+/// </summary>
+[BusinessEvents(classStr(NAVAXDMFImportStatusBusinessEventContract), "Data management import status business event", "Data management import status event to send the status of an import execution", ModuleAxapta::DIXF)]
+public final class NAVAXDMFImportStatusBusinessEvent extends BusinessEventsBase
+{
+    private RefRecId recId;
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>parmRecId</Name>
+				<Source><![CDATA[
+    private RefRecId parmRecId(RefRecId _recId = recId)
+    {
+        recId = _recId;
+        return recId;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>newFromDMFDefinitionGroupExecutionRecId</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Creates a <c>NAVAXDMFImportStatusBusinessEvent</c> from a RefRecId.
+    /// </summary>
+    /// <param name = "_recId"> The A record identifier for the <c>DMFEntityExportDetails</c> table.</param>
+    /// <returns>A <c>NAVAXDMFImportStatusBusinessEvent</c>.</returns>
+    public static NAVAXDMFImportStatusBusinessEvent newFromDMFDefinitionGroupExecutionRecId(RefRecId _recId)
+    {
+        NAVAXDMFImportStatusBusinessEvent businessEvent = new NAVAXDMFImportStatusBusinessEvent();
+        businessEvent.parmRecId(_recId);
+        return businessEvent;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>new</Name>
+				<Source><![CDATA[
+    private void new()
+    {
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>buildContract</Name>
+				<Source><![CDATA[
+    [Wrappable(true), Replaceable(true)]
+    public BusinessEventsContract buildContract()
+    {
+        DMFDefinitionGroupExecution dmfDefinitionGroupExecution;
+
+        select firstonly dmfDefinitionGroupExecution
+            where dmfDefinitionGroupExecution.RecId == recId;
+
+        return NAVAXDMFImportStatusBusinessEventContract::newFromDMFDefinitionGroupExecution(dmfDefinitionGroupExecution);
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

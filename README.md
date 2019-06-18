@@ -2,7 +2,8 @@
 Event Based Integration using Business Events and Data Management Framework
 
 ## Trigger
-The main trigger is in the handler class. Notice how it is only firing when the category is Integration.
+The trigger is based on the **DMFEntityExportDetails** table. This table is used by the data management framework to store the detail for the export file.
+There is a filter to only fire when the category is Integration.
 ```
 class NAVAXDMFExportBusinessEventHandler
 {

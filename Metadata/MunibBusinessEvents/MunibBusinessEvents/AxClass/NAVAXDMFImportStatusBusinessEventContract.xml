@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>NAVAXDMFImportStatusBusinessEventContract</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The data contract for a <c>NAVAXDMFImportStatusBusinessEvent</c>.
+/// </summary>
+[DataContract]
+public final class NAVAXDMFImportStatusBusinessEventContract extends BusinessEventsContract
+{
+    private RefRecId recId;    
+    private DMFEntityName entityName;
+    private LegalEntityDataAreaId  legalEntity;    
+    private str status;
+    private str fileName;
+    private str executionId;
+    private int noOfCreatedRecords;
+    private int noOfUpdatedRecords;
+    private int noOfRecords;
+    private DMFOperationType operationType;
+    private DMFProjectCategory  projectCategory;
+    private DateTimeIso8601 startedDateTime;
+        
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>newFromDMFDefinitionGroupExecution</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Creates a <c>NAVAXDMFImportStatusBusinessEventContract</c> from a <c>DMFDefinitionGroupExecution</c> record.
+    /// </summary>
+    /// <param name = "_dmfDefinitionGroupExecution">A <c>DMFDefinitionGroupExecution</c> record.</param>
+    /// <returns>A <c>NAVAXDMFImportStatusBusinessEventContract</c>.</returns>
+    public static NAVAXDMFImportStatusBusinessEventContract newFromDMFDefinitionGroupExecution(DMFDefinitionGroupExecution _dmfDefinitionGroupExecution)
+    {
+        var contract = new NAVAXDMFImportStatusBusinessEventContract();
+        contract.initialize(_dmfDefinitionGroupExecution);
+        return contract;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>initialize</Name>
+				<Source><![CDATA[
+    private void initialize(DMFDefinitionGroupExecution _dmfDefinitionGroupExecution)
+    {     
+        DMFDefinitionGroup dmfDefinitionGroup = DMFDefinitionGroup::find(_dmfDefinitionGroupExecution.DefinitionGroup);
+        recId               = _dmfDefinitionGroupExecution.RecId;
+        entityName          = _dmfDefinitionGroupExecution.Entity;
+        legalEntity         = _dmfDefinitionGroupExecution.company();        
+        status              = this.getStatus(_dmfDefinitionGroupExecution);
+        noOfCreatedRecords  = _dmfDefinitionGroupExecution.NumOfTargetNew;
+        noOfUpdatedRecords  = _dmfDefinitionGroupExecution.NumOfTargetUpdated;
+        noOfRecords         = _dmfDefinitionGroupExecution.NoOfRecords;
+        fileName            = _dmfDefinitionGroupExecution.FilePath;
+        executionId         = _dmfDefinitionGroupExecution.ExecutionId;
+        startedDateTime     = _dmfDefinitionGroupExecution.StartDateTime;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>getStatus</Name>
+				<Source><![CDATA[
+    private str getStatus(DMFDefinitionGroupExecution _dmfDefinitionGroupExecution)
+    {
+        DMFExecutionSummaryStatus summaryStatus = _dmfDefinitionGroupExecution.GetExecutionSummaryStatus();
+        return enum2Str(summaryStatus);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>new</Name>
+				<Source><![CDATA[
+    private void new()
+    {
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmEntityName</Name>
+				<Source><![CDATA[
+    [DataMember('EntityName'), BusinessEventsDataMember("Entity name")]
+    public DMFEntityName parmEntityName(DMFEntityName _entityName = entityName)
+    {
+        entityName = _entityName;
+        return entityName;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmOperationType</Name>
+				<Source><![CDATA[
+    [DataMember('OperationType'), BusinessEventsDataMember("Operation type")]
+    public DMFOperationType parmOperationType(DMFOperationType _operationType = operationType)
+    {
+        operationType = _operationType;
+        return operationType;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmProjectCategory</Name>
+				<Source><![CDATA[
+    [DataMember('ProjectCategory'), BusinessEventsDataMember("Project category")]
+    public DMFProjectCategory parmProjectCategory(DMFProjectCategory _projectCategory = projectCategory)
+    {
+        projectCategory = _projectCategory;
+        return projectCategory;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmLegalEntity</Name>
+				<Source><![CDATA[
+    [DataMember('LegalEntity'), BusinessEventsDataMember("Legal entity")]
+    public LegalEntityDataAreaId parmLegalEntity(LegalEntityDataAreaId _legalEntity = legalEntity)
+    {
+        legalEntity = _legalEntity;
+        return legalEntity;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmNoOfCreatedRecords</Name>
+				<Source><![CDATA[
+    [DataMember('NoOfCreatedRecords'), BusinessEventsDataMember("Number of created records")]
+    public int parmNoOfCreatedRecords(int _noOfCreatedRecords = noOfCreatedRecords)
+    {
+        noOfCreatedRecords = _noOfCreatedRecords;
+        return noOfCreatedRecords;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmNoOfUpdatedRecords</Name>
+				<Source><![CDATA[
+    [DataMember('NoOfUpdatedRecords'), BusinessEventsDataMember("Number of updated records")]
+    public int parmNoOfUpdatedRecords(int _noOfUpdatedRecords = noOfUpdatedRecords)
+    {
+        noOfUpdatedRecords = _noOfUpdatedRecords;
+        return noOfUpdatedRecords;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmNoOfRecords</Name>
+				<Source><![CDATA[
+    [DataMember('NoOfRecords'), BusinessEventsDataMember("Number of records")]
+    public int parmNoOfRecords(int _noOfRecords = noOfRecords)
+    {
+        noOfRecords = _noOfRecords;
+        return noOfRecords;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmRecId</Name>
+				<Source><![CDATA[
+    [DataMember('RecId'), BusinessEventsDataMember("RecId")]
+    public RefRecId parmRecId(RefRecId _recId = recId)
+    {
+        recId = _recId;
+        return recId;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmExecutionId</Name>
+				<Source><![CDATA[
+    [DataMember('ExecutionId'), BusinessEventsDataMember("Execution ID")]
+    public str parmExecutionId(str _executionId = executionId)
+    {
+        executionId = _executionId;
+        return executionId;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmFileName</Name>
+				<Source><![CDATA[
+    [DataMember('FileName'), BusinessEventsDataMember("file name")]
+    public str parmFileName(str _fileName = fileName)
+    {
+        fileName = _fileName;
+        return fileName;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmStatus</Name>
+				<Source><![CDATA[
+    [DataMember('Status'), BusinessEventsDataMember("Status")]
+    public str parmStatus(str _status = status)
+    {
+        status = _status;
+        return status;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmStartedDateTime</Name>
+				<Source><![CDATA[
+    [DataMember("StartedDateTime")]
+    public DateTimeIso8601 parmStartedDateTime(DateTimeIso8601 _startedDateTime = startedDateTime)
+    {
+        startedDateTime = _startedDateTime;
+        return startedDateTime;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>
