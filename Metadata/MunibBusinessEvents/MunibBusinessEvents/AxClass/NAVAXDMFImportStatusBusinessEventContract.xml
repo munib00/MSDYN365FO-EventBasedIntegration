@@ -20,23 +20,23 @@ public final class NAVAXDMFImportStatusBusinessEventContract extends BusinessEve
     private int noOfRecords;
     private DMFOperationType operationType;
     private DMFProjectCategory  projectCategory;
-    private DateTimeIso8601 startedDateTime;
+    private DateTimeIso8601 startedDateTime, endDateTime;
         
 }
 ]]></Declaration>
 		<Methods>
 			<Method>
-				<Name>newFromDMFDefinitionGroupExecution</Name>
+				<Name>newFromDMFDefinitionGroupExecutionHistory</Name>
 				<Source><![CDATA[
     /// <summary>
-    /// Creates a <c>NAVAXDMFImportStatusBusinessEventContract</c> from a <c>DMFDefinitionGroupExecution</c> record.
+    /// Creates a <c>NAVAXDMFImportStatusBusinessEventContract</c> from a <c>DMFDefinitionGroupExecutionHistory</c> record.
     /// </summary>
-    /// <param name = "_dmfDefinitionGroupExecution">A <c>DMFDefinitionGroupExecution</c> record.</param>
+    /// <param name = "_dmfDefinitionGroupExecutionHistory">A <c>DMFDefinitionGroupExecutionHistory</c> record.</param>
     /// <returns>A <c>NAVAXDMFImportStatusBusinessEventContract</c>.</returns>
-    public static NAVAXDMFImportStatusBusinessEventContract newFromDMFDefinitionGroupExecution(DMFDefinitionGroupExecution _dmfDefinitionGroupExecution)
+    public static NAVAXDMFImportStatusBusinessEventContract newFromDMFDefinitionGroupExecutionHistory(DMFDefinitionGroupExecutionHistory _dmfDefinitionGroupExecutionHistory)
     {
         var contract = new NAVAXDMFImportStatusBusinessEventContract();
-        contract.initialize(_dmfDefinitionGroupExecution);
+        contract.initialize(_dmfDefinitionGroupExecutionHistory);
         return contract;
     }
 
@@ -45,19 +45,20 @@ public final class NAVAXDMFImportStatusBusinessEventContract extends BusinessEve
 			<Method>
 				<Name>initialize</Name>
 				<Source><![CDATA[
-    private void initialize(DMFDefinitionGroupExecution _dmfDefinitionGroupExecution)
+    private void initialize(DMFDefinitionGroupExecutionHistory _dmfDefinitionGroupExecutionHistory)
     {     
-        DMFDefinitionGroup dmfDefinitionGroup = DMFDefinitionGroup::find(_dmfDefinitionGroupExecution.DefinitionGroup);
-        recId               = _dmfDefinitionGroupExecution.RecId;
-        entityName          = _dmfDefinitionGroupExecution.Entity;
-        legalEntity         = _dmfDefinitionGroupExecution.company();        
-        status              = this.getStatus(_dmfDefinitionGroupExecution);
-        noOfCreatedRecords  = _dmfDefinitionGroupExecution.NumOfTargetNew;
-        noOfUpdatedRecords  = _dmfDefinitionGroupExecution.NumOfTargetUpdated;
-        noOfRecords         = _dmfDefinitionGroupExecution.NoOfRecords;
-        fileName            = _dmfDefinitionGroupExecution.FilePath;
-        executionId         = _dmfDefinitionGroupExecution.ExecutionId;
-        startedDateTime     = _dmfDefinitionGroupExecution.StartDateTime;
+        DMFDefinitionGroup dmfDefinitionGroup = DMFDefinitionGroup::find(_dmfDefinitionGroupExecutionHistory.DefinitionGroup);
+        recId               = _dmfDefinitionGroupExecutionHistory.RecId;
+        entityName          = _dmfDefinitionGroupExecutionHistory.Entity;
+        legalEntity         = _dmfDefinitionGroupExecutionHistory.company();
+        status              = this.getStatus(_dmfDefinitionGroupExecutionHistory);
+        noOfCreatedRecords  = _dmfDefinitionGroupExecutionHistory.NumOfTargetNew;
+        noOfUpdatedRecords  = _dmfDefinitionGroupExecutionHistory.NumOfTargetUpdated;
+        noOfRecords         = _dmfDefinitionGroupExecutionHistory.NoOfRecords;
+        fileName            = _dmfDefinitionGroupExecutionHistory.FilePath;
+        executionId         = _dmfDefinitionGroupExecutionHistory.ExecutionId;
+        startedDateTime     = _dmfDefinitionGroupExecutionHistory.WriteStartDateTime;
+        endDateTime         = _dmfDefinitionGroupExecutionHistory.WriteEndDateTime;
     }
 
 ]]></Source>
@@ -65,9 +66,10 @@ public final class NAVAXDMFImportStatusBusinessEventContract extends BusinessEve
 			<Method>
 				<Name>getStatus</Name>
 				<Source><![CDATA[
-    private str getStatus(DMFDefinitionGroupExecution _dmfDefinitionGroupExecution)
+    private str getStatus(DMFDefinitionGroupExecutionHistory _dmfDefinitionGroupExecutionHistory)
     {
-        DMFExecutionSummaryStatus summaryStatus = _dmfDefinitionGroupExecution.GetExecutionSummaryStatus();
+        DMFDefinitionGroupExecution dmfDefinitionGroupExecution = DMFDefinitionGroupExecution::find(_dmfDefinitionGroupExecutionHistory.DefinitionGroup, _dmfDefinitionGroupExecutionHistory.Entity, _dmfDefinitionGroupExecutionHistory.ExecutionId);
+        DMFExecutionSummaryStatus summaryStatus = dmfDefinitionGroupExecution.GetExecutionSummaryStatus();
         return enum2Str(summaryStatus);
     }
 
@@ -222,6 +224,18 @@ public final class NAVAXDMFImportStatusBusinessEventContract extends BusinessEve
     {
         startedDateTime = _startedDateTime;
         return startedDateTime;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmEndDateTime</Name>
+				<Source><![CDATA[
+    [DataMember("EndDateTime")]
+    public DateTimeIso8601 parmEndDateTime(DateTimeIso8601 _endDateTime = endDateTime)
+    {
+        endDateTime = _endDateTime;
+        return endDateTime;
     }
 
 ]]></Source>

@@ -25,14 +25,14 @@ public final class NAVAXDMFImportStatusBusinessEvent extends BusinessEventsBase
 ]]></Source>
 			</Method>
 			<Method>
-				<Name>newFromDMFDefinitionGroupExecutionRecId</Name>
+				<Name>newFromDMFDefinitionGroupExecutionHistoryRecId</Name>
 				<Source><![CDATA[
     /// <summary>
     /// Creates a <c>NAVAXDMFImportStatusBusinessEvent</c> from a RefRecId.
     /// </summary>
     /// <param name = "_recId"> The A record identifier for the <c>DMFEntityExportDetails</c> table.</param>
     /// <returns>A <c>NAVAXDMFImportStatusBusinessEvent</c>.</returns>
-    public static NAVAXDMFImportStatusBusinessEvent newFromDMFDefinitionGroupExecutionRecId(RefRecId _recId)
+    public static NAVAXDMFImportStatusBusinessEvent newFromDMFDefinitionGroupExecutionHistoryRecId(RefRecId _recId)
     {
         NAVAXDMFImportStatusBusinessEvent businessEvent = new NAVAXDMFImportStatusBusinessEvent();
         businessEvent.parmRecId(_recId);
@@ -56,12 +56,12 @@ public final class NAVAXDMFImportStatusBusinessEvent extends BusinessEventsBase
     [Wrappable(true), Replaceable(true)]
     public BusinessEventsContract buildContract()
     {
-        DMFDefinitionGroupExecution dmfDefinitionGroupExecution;
+        DMFDefinitionGroupExecutionHistory dmfDefinitionGroupExecutionHistory;
 
-        select firstonly dmfDefinitionGroupExecution
-            where dmfDefinitionGroupExecution.RecId == recId;
+        select firstonly dmfDefinitionGroupExecutionHistory
+            where dmfDefinitionGroupExecutionHistory.RecId == recId;
 
-        return NAVAXDMFImportStatusBusinessEventContract::newFromDMFDefinitionGroupExecution(dmfDefinitionGroupExecution);
+        return NAVAXDMFImportStatusBusinessEventContract::newFromDMFDefinitionGroupExecutionHistory(dmfDefinitionGroupExecutionHistory);
     }
 
 ]]></Source>

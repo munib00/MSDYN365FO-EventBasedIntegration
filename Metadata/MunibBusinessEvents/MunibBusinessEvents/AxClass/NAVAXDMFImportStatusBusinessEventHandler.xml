@@ -9,24 +9,24 @@ class NAVAXDMFImportStatusBusinessEventHandler
 ]]></Declaration>
 		<Methods>
 			<Method>
-				<Name>DMFDefinitionGroupExecution_onUpdated</Name>
+				<Name>DMFDefinitionGroupExecutionHistory_onInserted</Name>
 				<Source><![CDATA[
     /// <summary>
-    /// On update send the business event
+    /// On insert of an execution history trigger the business event
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    [DataEventHandler(tableStr(DMFDefinitionGroupExecution), DataEventType::Updated)]
-    public static void DMFDefinitionGroupExecution_onUpdated(Common sender, DataEventArgs e)
+    [DataEventHandler(tableStr(DMFDefinitionGroupExecutionHistory), DataEventType::Inserted)]
+    public static void DMFDefinitionGroupExecutionHistory_onInserted(Common sender, DataEventArgs e)
     {
-        DMFDefinitionGroupExecution dmfDefinitionGroupExecution = sender;
-        DMFDefinitionGroup dmfDefinitionGroup = DMFDefinitionGroup::find(dmfDefinitionGroupExecution.DefinitionGroup);
-        if (dmfDefinitionGroupExecution &&
+        DMFDefinitionGroupExecutionHistory dmfDefinitionGroupExecutionHistory = sender;
+        DMFDefinitionGroup dmfDefinitionGroup = DMFDefinitionGroup::find(dmfDefinitionGroupExecutionHistory.DefinitionGroup);
+        if (dmfDefinitionGroupExecutionHistory &&
             dmfDefinitionGroup.OperationType == DMFOperationType::Import &&
             dmfDefinitionGroup.ProjectCategory == DMFProjectCategory::Integration
             )
         {
-            NAVAXDMFImportStatusBusinessEvent businessEvent = NAVAXDMFImportStatusBusinessEvent::newFromDMFDefinitionGroupExecutionRecId(dmfDefinitionGroupExecution.RecId);
+            NAVAXDMFImportStatusBusinessEvent businessEvent = NAVAXDMFImportStatusBusinessEvent::newFromDMFDefinitionGroupExecutionHistoryRecId(dmfDefinitionGroupExecutionHistory.RecId);
             businessEvent.send();
         }
     }
